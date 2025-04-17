@@ -6,10 +6,6 @@ import { useEffect } from "react";
 export default function NavBar() {
   const { data: session, status } = useSession();
 
-
-    console.log("Auth status:", status);
-    console.log("Session data:", session);
-
   return (
     <nav className="bg-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

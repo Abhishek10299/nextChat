@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("All fields are require");
+          throw new Error("All fields are required");
         }
         try {
           await connectToDb();
@@ -31,7 +31,11 @@ export const authOptions: NextAuthOptions = {
             throw new Error("Invalid password");
           }
 
-          return user;
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+          };
         } catch (error) {
           console.error("Auth error:", error);
           throw error;
@@ -42,13 +46,13 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id;
+        token._id = user.id;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user._id = token.id as string;
+        session.user._id = token._id as string;
       }
       return session;
     },

@@ -42,7 +42,9 @@ export async function POST(request: NextRequest) {
 
     const { publicKey, privateKey } = generateKeyPair();
 
-    await User.create({ username, email, password, publicKey, privateKey });
+    const profilePicture = `https://avatar.iran.liara.run/username?username=${username}`;
+
+    await User.create({ username, email, password, profilePicture, publicKey, privateKey });
 
     return NextResponse.json(
       {

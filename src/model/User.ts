@@ -5,6 +5,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+  profilePicture:string;
   publicKey: string;
   privateKey: string;
   friends: mongoose.Types.ObjectId[];
@@ -29,6 +30,10 @@ const UserSchema = new Schema<IUser>(
     password: {
       type: String,
       required: [true, "Password is require"],
+    },
+    profilePicture:{
+      type :String,
+      required:[true,"Profile Picture is require"]
     },
     publicKey: {
       type: String,

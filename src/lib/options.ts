@@ -23,19 +23,20 @@ export const authOptions: NextAuthOptions = {
             throw new Error("No user found with this email");
           }
 
-          const vaildate = await bcrypt.compare(
+          const validate = await bcrypt.compare(
             credentials.password,
             user.password
           );
-          if (!vaildate) {
+          if (!validate) {
             throw new Error("Invalid password");
           }
 
           return {
             id: user._id.toString(),
             email: user.email,
-            name: user.name,
+            username: user.username,
           };
+;
         } catch (error) {
           console.error("Auth error:", error);
           throw error;
@@ -46,13 +47,16 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token._id = user.id;
+        console.log(user);
+        token._id = user._id?.toString();
+        token.username=user.username;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user._id = token._id as string;
+        session.user._id = token._id;
+        session.user.username=token.username;
       }
       return session;
     },

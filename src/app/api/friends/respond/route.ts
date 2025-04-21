@@ -2,7 +2,6 @@ import { connectToDb } from "@/lib/mongodb";
 import { authOptions } from "@/lib/options";
 import FriendRequest from "@/model/FriendRequest";
 import User from "@/model/User";
-import { connect } from "http2";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 

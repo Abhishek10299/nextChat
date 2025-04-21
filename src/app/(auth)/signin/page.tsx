@@ -48,13 +48,13 @@ export default function page() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="w-full max-w-md p-8 space-y-8 border bg-white rounded-lg">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Join NextChat
           </h1>
-          <p className="mb-4">Sign in to start chating</p>
+          <p className="mb-4">START CHATING</p>
         </div>
         <FormProvider {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -84,7 +84,7 @@ export default function page() {
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" variant="elevated" disabled={isLoading}>
               {isLoading ? (
                 <>
                   {" "}
@@ -92,7 +92,7 @@ export default function page() {
                   wait
                 </>
               ) : (
-                "Signin"
+                "Sign in"
               )}
             </Button>
           </form>

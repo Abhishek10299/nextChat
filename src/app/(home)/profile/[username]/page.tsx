@@ -4,13 +4,12 @@ import { useParams } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import axios from 'axios'
 
-// Define the type for a friend
 type Friend = {
   _id: string
   username: string
 }
 
-// Define the user data type
+
 type UserData = {
   username: string
   email: string

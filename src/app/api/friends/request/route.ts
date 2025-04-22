@@ -21,7 +21,20 @@ export async function POST(request: NextRequest) {
       );
     }
     const { receiverId } = await request.json();
+    const senderid = user._id;
     await connectToDb();
+
+    const req = await FriendRequest.findOne({
+      sender: senderid,
+      receiver: receiverId,
+    });
+
+    if(req){
+      return NextResponse.json(
+        { success: false, message:"Friend request already sent" },
+        { status: 200 }
+      );
+    }
 
     await FriendRequest.create({
       sender: user._id,
@@ -38,7 +51,7 @@ export async function POST(request: NextRequest) {
       }
     );
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       {
         success: false,

@@ -7,7 +7,8 @@ import bcrypt from "bcryptjs";
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      id: "credentials",
+      name: "credentials",
       credentials: {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
@@ -35,8 +36,8 @@ export const authOptions: NextAuthOptions = {
             id: user._id.toString(),
             email: user.email,
             username: user.username,
+            _id: user._id.toString(),
           };
-;
         } catch (error) {
           console.error("Auth error:", error);
           throw error;
@@ -49,14 +50,14 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         console.log(user);
         token._id = user._id?.toString();
-        token.username=user.username;
+        token.username = user.username;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user._id = token._id;
-        session.user.username=token.username;
+        session.user.username = token.username;
       }
       return session;
     },

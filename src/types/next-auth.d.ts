@@ -26,8 +26,8 @@ declare module "next-auth/jwt" {
   interface JWT {
     _id?: string;
     username?: string;
-    profilePicture?:string;
     email?: string;
+    profilePicture?:string;
     publicKey?: string;
     friends?: mongoose.Types.ObjectId[];
   }

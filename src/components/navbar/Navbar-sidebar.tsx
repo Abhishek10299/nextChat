@@ -1,6 +1,6 @@
 import React from "react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
-import { ScrollArea } from "./ui/scroll-area";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import { User } from "next-auth";

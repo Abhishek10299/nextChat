@@ -20,10 +20,12 @@ const FriendRequestSchema = new Schema<IFriendRequest>({
   },
   status: {
     type: String,
-    enum:["pending", "accepted", "rejected"],
+    enum: ["pending", "accepted", "rejected"],
     default: "pending",
   },
 });
+
+FriendRequestSchema.index({ sender: 1, receiver: 1 }, { unique: true });
 
 const FriendRequest =
   models?.FriendRequest ||

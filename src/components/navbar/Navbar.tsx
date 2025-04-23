@@ -2,13 +2,14 @@
 import { Poppins } from "next/font/google";
 import Link from "next/link";
 import clsx from "clsx";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import Navbarsidebar from "./Navbar-sidebar";
 import { useState } from "react";
-import { MenuIcon } from "lucide-react";
+import { Bell, MenuIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import { User } from "next-auth";
+import Notification from "@/components/notification/Notification";
 
 const popins = Poppins({
   subsets: ["latin"],
@@ -36,7 +37,6 @@ const NavbarItem = ({ herf, children, isActive }: NavbarItemProps) => {
   );
 };
 
-
 export default function Navbar() {
   const { data: session, status } = useSession();
   const user: User = session?.user as User;
@@ -44,7 +44,6 @@ export default function Navbar() {
   const navbarItems = [
     { href: "/", children: "Home" },
     { href: `/profile/${user?.username}`, children: "Profile" },
-    { href: "/notification", children: "Notification" },
   ];
 
   const pathname = usePathname();
@@ -78,15 +77,19 @@ export default function Navbar() {
         ""
       )}
       {status === "authenticated" ? (
-        <div className="hidden lg:flex">
+        <div className="hidden lg:flex items-center">
+          <div> 
+          <Notification/>
+          </div>
           <Button
             asChild
             onClick={() => signOut()}
             variant="secondary"
-            className="border-l border-t-0 border-b-0 border-r-0 px-12 h-full rounded-none bg-black text-white hover:bg-blue-400 hover:text-black transition-colors text-lg"
+            className="border-l border-t-0 border-b-0 border-r px-12 h-full rounded-none bg-black text-white hover:bg-blue-400 hover:text-black transition-colors text-lg"
           >
             <Link href="/signin">Log out</Link>
           </Button>
+          
         </div>
       ) : (
         ""
@@ -103,6 +106,7 @@ export default function Navbar() {
           >
             <Link href="/signin">Log in</Link>
           </Button>
+
         </div>
       )}
 
@@ -114,6 +118,10 @@ export default function Navbar() {
         >
           <MenuIcon />
         </Button>
+
+        <div>
+          <Notification/>
+          </div>
       </div>
     </nav>
   );

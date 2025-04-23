@@ -35,8 +35,9 @@ export async function  POST(request:NextRequest) {
         }
 
         if(action==="accept"){
-            await User.findByIdAndUpdate(req.sender,{$addToSet:{friends:req.receiver}})
-            await User.findByIdAndUpdate(req.sender,{$addToSet:{friends:req.receiver}})
+          await User.findByIdAndUpdate(req.sender, { $addToSet: { friends: req.receiver } });
+          await User.findByIdAndUpdate(req.receiver, { $addToSet: { friends: req.sender } });
+          
             req.status='accepted';
         }
         else{
@@ -47,7 +48,7 @@ export async function  POST(request:NextRequest) {
 
         return NextResponse.json({
             success: true,
-            message: req,
+            message: req.status,
           },
           {
             status: 200,

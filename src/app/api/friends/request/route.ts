@@ -25,8 +25,11 @@ export async function POST(request: NextRequest) {
     await connectToDb();
 
     const req = await FriendRequest.findOne({
-      sender: senderid,
-      receiver: receiverId,
+      $or: [
+        { sender: senderid, receiver: receiverId },
+        { sender: receiverId, receiver: senderid },
+      ],
+      status: { $in: ["pending", "accepted"] },
     });
 
     if(req){

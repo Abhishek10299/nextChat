@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import axios, { AxiosError } from "axios";
@@ -8,13 +8,14 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { User } from "next-auth";
+import { LucideLoader2 } from "lucide-react";
 
-type Friend = {
+interface Friend {
   _id: string;
   username: string;
 };
 
-type UserData = {
+interface UserData {
   _id: string;
   username: string;
   email: string;
@@ -40,7 +41,7 @@ export default function ProfilePage() {
       setUserData(response.data.message);
       setLoading(false);
     } catch (error) {
-      console.error("Error in signup of user", error);
+      console.error("Error in profile page", error);
       const axiosError = error as unknown as AxiosError<ApiResponse>;
       let errorMessage = axiosError.response?.data.message;
       toast.error(errorMessage);
@@ -58,17 +59,12 @@ export default function ProfilePage() {
       
       const mapStatusToLabel = (status: string) => {
         switch (status) {
-          case "pending":
-            return "Request Sent";
-          case "accepted":
-            return "Friends";
-          case "rejected":
-            return "Send Request";
-          default:
-            return "Send Request";
+          case "pending": return "Request Sent";
+          case "accepted": return "Friends";
+          case "rejected": return "Send Request";
+          default: return "Send Request";
         }
       };
-      console.log(response.data.message);
       setButtonStatus(mapStatusToLabel(response.data.message));
     } catch (error) {
       console.error("Error in signup of user", error);
@@ -100,22 +96,21 @@ export default function ProfilePage() {
       setIsSwitchLoading(true)
 
       try {
-        console.log(userData._id);
         const response = await axios.post(`/api/friends/request`, {
           receiverId: userData._id,
         });
         toast.success(response.data.message);
-        setLoading(false);
+        fetchButtonStatus();
+        setIsSwitchLoading(false);
       } catch (error) {
         console.error("Error in sending friend request", error);
         const axiosError = error as unknown as AxiosError<ApiResponse>;
         let errorMessage = axiosError.response?.data.message;
         toast.error(errorMessage);
-        setLoading(false);
+        setIsSwitchLoading(false);
       }
     }
   };
-
   if (loading) return <p className="text-center mt-20">Loading...</p>;
 
   return (
@@ -155,8 +150,8 @@ export default function ProfilePage() {
               <div className="md:col-span-2">
                 <p className="font-semibold mb-2">Friends List:</p>
                 <ul className="list-disc pl-6 space-y-1">
-                  {userData.friends.map((friend) => (
-                    <li key={friend._id}>{friend.username}</li>
+                  {userData.friends.map((friend,index) => (
+                    <li key={index}>{friend.username}</li>
                   ))}
                 </ul>
               </div>
@@ -165,7 +160,8 @@ export default function ProfilePage() {
               ) : (
                 <div>
                     <Button disabled={buttonStatus !== "Send Request"} onClick={sendRequest} variant="elevated">
-                      {buttonStatus}
+                   {isSwitchLoading? <><LucideLoader2 className="mr-2 h-4 w-4 animate-spin" /> Please
+                  wait:</>:buttonStatus}
                     </Button>
                 </div>
               )}

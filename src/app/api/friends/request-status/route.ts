@@ -24,8 +24,11 @@ export async function POST(request: NextRequest) {
     const { receiverid } = await request.json();
 
     const req = await FriendRequest.findOne({
-      sender: senderid,
-      receiver: receiverid,
+      $or: [
+        { sender: senderid, receiver: receiverid },
+        { sender: receiverid, receiver: senderid },
+      ],
+      status: { $in: ["accepted", "pending"] },
     });
 
     if (!req) {

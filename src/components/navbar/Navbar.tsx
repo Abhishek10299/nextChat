@@ -44,6 +44,7 @@ export default function Navbar() {
   const navbarItems = [
     { href: "/", children: "Home" },
     { href: `/profile/${user?.username}`, children: "Profile" },
+    { href: "/chat", children: "Chat" },
   ];
 
   const pathname = usePathname();

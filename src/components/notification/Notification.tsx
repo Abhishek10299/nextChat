@@ -4,8 +4,6 @@ import { Bell, LucideLoader2 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import FriendRequestNotification from "./FriendRequestNotification";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
-import { User } from "next-auth";
 
 interface Sender {
   _id: string;
@@ -54,7 +52,7 @@ export default function Notification() {
       } else {
         toast.success("Friend Request Rejected");
       }
-      fetchList()
+      fetchList();
       setActionLoading(false);
     } catch (error) {
       console.error("Error in notification", error);
@@ -64,7 +62,6 @@ export default function Notification() {
       setActionLoading(false);
     }
   };
-  console.log(isOpen);
 
   useEffect(() => {
     fetchList();

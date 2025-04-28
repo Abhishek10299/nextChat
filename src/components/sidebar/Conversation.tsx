@@ -3,14 +3,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface ConversationProps {
   username: string;
-  lastMessage: string;
   profilePicture: string;
   isSelected?: boolean;
 }
 
 export default function Conversation({
   username,
-  lastMessage,
   profilePicture,
   isSelected = false,
 }: ConversationProps) {
@@ -27,7 +25,7 @@ export default function Conversation({
       <div className="flex flex-col overflow-hidden">
         <span className="font-medium truncate">{username}</span>
         <span className="text-xs text-muted-foreground truncate">
-          {lastMessage}
+          last message
         </span>
       </div>
     </div>

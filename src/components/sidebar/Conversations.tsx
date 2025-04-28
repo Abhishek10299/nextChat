@@ -5,10 +5,8 @@ import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
 import { toast } from "sonner";
 import { LucideLoader2 } from "lucide-react";
-import type { AppDispatch, RootState } from "@/store/store";
-import { useDispatch } from "react-redux";
-import { setUsername } from "@/store/selectedConversationSlice";
-import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+
 
 interface Conversations {
   _id: string;
@@ -19,9 +17,9 @@ interface Conversations {
 export default function Conversations() {
   const [conversations, setConversations] = useState<Conversations[]>([]);
   const [loading, setLoading] = useState(true);
-  const username = useSelector((state: RootState) => state.selectedConversation.username);
-
-  const dispatch = useDispatch<AppDispatch>();
+  const [selectedConversation,setSelectedConversation]=useState("")
+  const router = useRouter()
+  
 
   const getFriends = async () => {
     try {
@@ -38,6 +36,10 @@ export default function Conversations() {
     }
   };
 
+  const openFriendChat=(username:string)=>{
+    router.push(`/chat/${username}`)
+  }
+
   useEffect(() => {
     getFriends();
   }, []);
@@ -48,11 +50,11 @@ export default function Conversations() {
         <LucideLoader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : (
         conversations.map((conv) => (
-          <div key={conv._id} onClick={() => dispatch(setUsername(conv.username))}>
+          <div key={conv._id} onClick={()=> openFriendChat(conv.username)}>
             <Conversation
               username={conv.username}
               profilePicture={conv.profilePicture}
-              isSelected={conv.username === username ? true : false}
+              isSelected={conv.username === '' ? true : false}
             />
           </div>
         ))

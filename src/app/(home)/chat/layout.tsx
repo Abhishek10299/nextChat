@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <div className="h-screen p-4 flex justify-center">
       <Sidebar />
-      {children}
+      {children }
     </div>
   );
 } 

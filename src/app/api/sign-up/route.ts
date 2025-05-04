@@ -1,23 +1,14 @@
 import { connectToDb } from "@/lib/mongodb";
 import User from "@/model/User";
 import { NextRequest, NextResponse } from "next/server";
-import nacl from "tweetnacl";
-import util from "tweetnacl-util";
 
-export function generateKeyPair() {
-  const keyPair = nacl.box.keyPair();
-  return {
-    publicKey: util.encodeBase64(keyPair.publicKey),
-    privateKey: util.encodeBase64(keyPair.secretKey),
-  };
-}
 
 export async function POST(request: NextRequest) {
   await connectToDb();
 
   try {
-    const { username, email, password } = await request.json();
-    if (!username || !email || !password) {
+    const { username, email, password, publicKey } = await request.json();
+    if (!username || !email || !password || !publicKey) {
       return NextResponse.json(
         { success: false, message: "all fields are required" },
         {
@@ -40,11 +31,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { publicKey, privateKey } = generateKeyPair();
 
     const profilePicture = `https://avatar.iran.liara.run/username?username=${username}`;
 
-    await User.create({ username, email, password, profilePicture, publicKey, privateKey });
+    await User.create({ username, email, password, profilePicture ,publicKey});
 
     return NextResponse.json(
       {

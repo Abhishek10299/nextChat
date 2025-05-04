@@ -1,16 +1,15 @@
 import mongoose, { Schema, models, model } from "mongoose";
-import User from "./User";
 
 export interface IMessage {
   sender: mongoose.Types.ObjectId;
+  receiver: mongoose.Types.ObjectId;
   contentEncrypted: string;
-  timestamp: Date;
+  nonce: string;
 }
 
- export interface IChat extends Document {
+export interface IChat extends Document {
   participants: mongoose.Types.ObjectId[];
   messages: IMessage[];
-  lastUpdated: Date;
 }
 
 const ChatSchema = new Schema<IChat>({
@@ -23,14 +22,17 @@ const ChatSchema = new Schema<IChat>({
   messages: [
     {
       sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      receiver: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
       contentEncrypted: {
         type: String,
         required: [true, "content is require"],
       },
-      timestamp: { type: Date, default: Date.now },
+      nonce: {
+        type: String,
+        require: [true, "Nonce is required"],
+      },
     },
   ],
-  lastUpdated: { type: Date, default: Date.now },
 });
 
 const Chat = models?.Chat || model("Chat", ChatSchema);

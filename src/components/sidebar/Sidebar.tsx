@@ -10,9 +10,7 @@ export default function Sidebar() {
       <CardContent className="p-4 pb-0">
         <SearchInput />
       </CardContent>
-
       <div className="border-t my-2" />
-
       <ScrollArea className="flex-1 ">
         <div className="p-4 ">
           <Conversations />

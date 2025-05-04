@@ -7,7 +7,6 @@ import { toast } from "sonner";
 import { LucideLoader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-
 interface Conversations {
   _id: string;
   username: string;
@@ -17,14 +16,16 @@ interface Conversations {
 export default function Conversations() {
   const [conversations, setConversations] = useState<Conversations[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedConversation,setSelectedConversation]=useState("")
-  const router = useRouter()
-  
+  const [selectedConversation, setSelectedConversation] = useState("");
+  const router = useRouter();
 
   const getFriends = async () => {
     try {
       const result = await axios.get("/api/users/get-friends");
-      setConversations(result.data.message);
+      const friends = Array.isArray(result.data.message)
+        ? result.data.message
+        : [];
+      setConversations(friends);
       console.log(result.data.message);
       setLoading(false);
     } catch (error) {
@@ -36,9 +37,10 @@ export default function Conversations() {
     }
   };
 
-  const openFriendChat=(username:string)=>{
-    router.push(`/chat/${username}`)
-  }
+  const openFriendChat = (username: string) => {
+    router.push(`/chat/${username}`);
+    setSelectedConversation(username);
+  };
 
   useEffect(() => {
     getFriends();
@@ -50,11 +52,11 @@ export default function Conversations() {
         <LucideLoader2 className="mr-2 h-4 w-4 animate-spin" />
       ) : (
         conversations.map((conv) => (
-          <div key={conv._id} onClick={()=> openFriendChat(conv.username)}>
+          <div key={conv._id} onClick={() => openFriendChat(conv.username)}>
             <Conversation
               username={conv.username}
               profilePicture={conv.profilePicture}
-              isSelected={conv.username === '' ? true : false}
+              isSelected={conv.username === selectedConversation ? true : false}
             />
           </div>
         ))

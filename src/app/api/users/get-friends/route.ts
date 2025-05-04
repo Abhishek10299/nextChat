@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const user = await User.findById(currentUserId)
       .populate({
         path: "friends",
-        select: "_id username profilePicture"
+        select: "_id username profilePicture publicKey"
       });
 
     if (!user || user.friends.length === 0) {

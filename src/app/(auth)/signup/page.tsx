@@ -22,6 +22,8 @@ import Link from "next/link";
 import { LucideLoader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import nacl from "tweetnacl";
+import util from "tweetnacl-util";
 
 export default function Page() {
   const [isLoading, setIsLoading] = useState(false);
@@ -29,12 +31,24 @@ export default function Page() {
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
-    defaultValues: { username: "", email: "", password: "" },
+    defaultValues: { username: "", email: "", password: "", publicKey: "" },
   });
+
+  const generateKeyPair = (username: string) => {
+    const keyPair = nacl.box.keyPair();
+    const publicKey = util.encodeBase64(keyPair.publicKey);
+    const privateKey = util.encodeBase64(keyPair.secretKey);
+    const keys = JSON.parse(localStorage.getItem("privateKeys") || "{}");
+    keys[username] = privateKey;
+    localStorage.setItem("privateKeys", JSON.stringify(keys));
+    return publicKey;
+  };
 
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setIsLoading(true);
     try {
+      data.publicKey = generateKeyPair(data.username);
+
       const responce = await axios.post<ApiResponse>("/api/sign-up", data);
       toast.success(responce.data.message);
       router.replace("/signin");
@@ -101,7 +115,6 @@ export default function Page() {
             <Button type="submit" variant="elevated" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  {" "}
                   <LucideLoader2 className="mr-2 h-4 w-4 animate-spin" /> Please
                   wait
                 </>

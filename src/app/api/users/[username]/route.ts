@@ -1,13 +1,13 @@
 import { connectToDb } from "@/lib/mongodb";
 import User from "@/model/User";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
-  request: Request,
-  { params }: { params: { username: string } }
+  request: NextRequest,
+  context: { params: Promise<{ username: string }>}
 ) {
   try {
-    const { username } = params;
+    const { username } = await context.params;
     await connectToDb();
 
     const profile = await User.findOne({ username })

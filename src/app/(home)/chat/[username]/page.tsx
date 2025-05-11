@@ -50,7 +50,6 @@ export default function Page() {
     fetchUserData();
   }, [username]);
 
-
   return (
     <div className="flex bg-white border-l-0 border rounded-r-xl flex-col h-full">
       <div className="border-b p-3 text-sm text-muted-foreground">
@@ -64,17 +63,20 @@ export default function Page() {
         </span>
       </div>
       <div className="flex-1 overflow-y-auto">
-        
-        {loading?(<div className="flex items-center space-x-4 m-4 p-4">
-          <Skeleton className="h-12 w-12 bg-gray-400 rounded-full" />
-          <div className="space-y-2">
-            <Skeleton className="h-4 bg-gray-400 w-[250px]" />
-            <Skeleton className="h-4 bg-gray-400 w-[200px]" />
+        {loading ? (
+          <div className="flex items-center space-x-4 m-4 p-4">
+            <Skeleton className="h-12 w-12 bg-gray-400 rounded-full" />
+            <div className="space-y-2">
+              <Skeleton className="h-4 bg-gray-400 w-[250px]" />
+              <Skeleton className="h-4 bg-gray-400 w-[200px]" />
+            </div>
           </div>
-        </div>):<Messages 
-          receiverId={userData?._id || ""}
-          publicKey={userData?.publicKey || ""}
-        />}
+        ) : (
+          <Messages
+            receiverId={userData?._id || ""}
+            publicKey={userData?.publicKey || ""}
+          />
+        )}
       </div>
       <MessageInput
         receiverId={userData?._id || ""}

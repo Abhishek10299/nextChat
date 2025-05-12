@@ -16,6 +16,8 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+import { getSocket } from "@/config/socket";
+
 export default function MessageInput({
   receiverId,
   publicKey,
@@ -58,9 +60,13 @@ export default function MessageInput({
       data.nonce = encodedNonce;
 
       const result = await axios.post("/api/chat/send-message", data);
-
-      console.log(result.data);
       form.reset(); // clear input after sending
+      const socket=getSocket();
+      socket.connect();
+      socket.emit("new-message",{
+        to:receiverId,
+        from:session?.user._id,
+      })
     } catch (error) {
       console.error("Error in sending message", error);
       const axiosError = error as AxiosError<ApiResponse>;
